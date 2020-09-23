@@ -4,7 +4,7 @@
 
 * Package Information
   - Name :: firmware_uploader_python
-  - Version :: 0.2.0
+  - Version :: 0.3.0
   - License :: BSD
   - URL :: https://github.com/janelia-pypi/firmware_uploader_python
   - Author :: Peter Polidoro
@@ -16,13 +16,33 @@
 
   #+BEGIN_SRC sh
     pio update
-    fu -e teensy40 https://github.com/janelia-arduino/YArenaValveController "(/dev/ttyACM)[0-2]"
+
+    fu -e teensy40 -d https://github.com/janelia-arduino/YArenaValveController "(/dev/ttyACM)[0-2]"
+    # Environment: teensy40
+    # Dry Run: True
     # Firmware URL: https://github.com/janelia-arduino/YArenaValveController
     # Upload ports: ['/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyACM2']
-  #+END_SRC
+    # Do you want to continue? [y/N]: y
+    # Cloning into 'YArenaValveController'...
+    #remote: Enumerating objects: 118, done.
+    # remote: Counting objects: 100% (118/118), done.
+    # remote: Compressing objects: 100% (78/78), done.
+    # remote: Total 118 (delta 65), reused 88 (delta 35), pack-reused 0
+    # Receiving objects: 100% (118/118), 19.79 KiB | 2.47 MiB/s, done.
+    # Resolving deltas: 100% (65/65), done.
+    # ['stty', '-F', '/dev/ttyACM0', '134']
+    # ['pio', 'run', '-e', 'teensy40', '--target', 'upload', '--upload-port', '/dev/ttyACM0']
+    # ['stty', '-F', '/dev/ttyACM1', '134']
+    # ['pio', 'run', '-e', 'teensy40', '--target', 'upload', '--upload-port', '/dev/ttyACM1']
+    # ['stty', '-F', '/dev/ttyACM2', '134']
+    # ['pio', 'run', '-e', 'teensy40', '--target', 'upload', '--upload-port', '/dev/ttyACM2']
 
-  #+BEGIN_SRC python
-    from firmware_uploader import FirmwareUploader
+    fu -e teensy40 https://github.com/janelia-arduino/YArenaValveController "(/dev/ttyACM)[0-2]"
+    # Environment: teensy40
+    # Dry Run: False
+    # Firmware URL: https://github.com/janelia-arduino/YArenaValveController
+    # Upload ports: ['/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyACM2']
+    # Do you want to continue? [y/N]:
   #+END_SRC
 
 * Installation

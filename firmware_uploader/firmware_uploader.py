@@ -28,12 +28,19 @@ class FirmwareUploader(object):
 
     '''
 
-    def __init__(self,environment,firmware_url,upload_ports,*args,**kwargs):
+    def __init__(self,environment,dry_run,firmware_url,upload_ports,*args,**kwargs):
         self.environment = environment
+        self.dry_run = dry_run
         self.firmware_url = firmware_url
         self.upload_ports = upload_ports
         if isinstance(self.upload_ports,str):
             self.upload_ports = list(sre_yield.AllStrings(self.upload_ports))
+
+    def _output(self,args):
+        if not self.dry_run:
+            subprocess.run(args)
+        else:
+            print(args)
 
     def run(self):
         with tempfile.TemporaryDirectory() as tmpdirname:
@@ -45,24 +52,31 @@ class FirmwareUploader(object):
             os.chdir(tmpdirpath)
             for upload_port in self.upload_ports:
                 if self.environment is not None:
-                    subprocess.run(['pio','run','-e',self.environment,'--target','upload','--upload-port',upload_port])
+                    if 'teensy' in self.environment:
+                        # teensy loader ignores --upload-port, so must manually
+                        # put into bootloader mode by setting baud of port
+                        # before uploading
+                        self._output(['stty','-F',upload_port,'134'])
+                    self._output(['pio','run','-e',self.environment,'--target','upload','--upload-port',upload_port])
                 else:
-                    subprocess.run(['pio','run','--target','upload','--upload-port',upload_port])
+                    self._output(['pio','run','--target','upload','--upload-port',upload_port])
 
 
 @click.command()
 @click.option('-e','--environment')
+@click.option('-d','--dry-run', is_flag=True)
 @click.argument('firmware_url')
 @click.argument('upload_ports_re')
-def cli(environment,firmware_url,upload_ports_re):
+def cli(environment,dry_run,firmware_url,upload_ports_re):
     upload_ports = list(sre_yield.AllStrings(upload_ports_re))
 
     print('Environment: {0}'.format(environment))
+    print('Dry Run: {0}'.format(dry_run))
     print('Firmware URL: {0}'.format(firmware_url))
     print('Upload ports: {0}'.format(upload_ports))
 
     if click.confirm('Do you want to continue?', abort=True):
-        fu = FirmwareUploader(environment,firmware_url,upload_ports)
+        fu = FirmwareUploader(environment,dry_run,firmware_url,upload_ports)
         fu.run()
 
 # -----------------------------------------------------------------------------------------
