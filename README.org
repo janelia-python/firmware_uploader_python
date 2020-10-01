@@ -43,6 +43,14 @@
     # Firmware URL: https://github.com/janelia-arduino/YArenaValveController
     # Upload ports: ['/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyACM2']
     # Do you want to continue? [y/N]:
+
+    fu -e teensy40 ./git/arduino/YArenaValveController/ "(/dev/ttyACM)[0-2]"
+    # Environment: teensy40
+    # Dry Run: False
+    # Firmware URL: ./git/arduino/YArenaValveController/
+    # Upload ports: ['/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyACM2']
+    # Do you want to continue? [y/N]:
+
   #+END_SRC
 
 * Installation
