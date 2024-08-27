@@ -21,7 +21,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/janelia-pypi/firmware_uploader_python',
+    url='https://github.com/janelia-python/firmware_uploader_python',
 
     # Author details
     author='Peter Polidoro',
